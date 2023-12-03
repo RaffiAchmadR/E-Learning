@@ -1,14 +1,6 @@
-# Nikah Yuk Website with Laravel 10.x
+# E-Learning Website with Laravel 10.x
 
-This GitHub repository contains a web programming project developed as part of the Web Programming course. The project focuses on building a website called "Nikah Yuk" using the Laravel framework version 10.x. The website aims to assist couples who are planning to get married by providing various useful features.
-
-## Features ✨
-
-- User registration: Couples can register as users to access the website's features.
-- Event scheduling: Couples can create and manage their wedding event schedule, including dates, times, and locations.
-- Guest list: Couples can create and manage their guest list, including tracking the attendance status of each guest.
-- Photo gallery: Couples can upload and share their wedding photos with invited guests.
-- Location map: Couples can add a map to the wedding venue to help guests find the location easily.
+This GitHub repository contains a web programming project developed as part of the Web Programming course. The project focuses on building a website called "E-Learning 100" using the Laravel framework version 10.x. The website aims to assist couples who are planning to get married by providing various useful features.
 
 ## Repository Contents 📁
 
@@ -77,13 +69,3 @@ If you would like to contribute to this project, please follow these steps:
 4. Push the changes to your forked repository.
 
 5. Submit a pull request to the main repository, explaining the changes you made.
-
-## License 📄
-
-This project is licensed under the [MIT License](LICENSE).
-
-Feel free to modify and customize the code according to your needs.
-
----
-
-We hope you find this project useful for your Web Programming course. If you have any questions or need further assistance, please don't hesitate to reach out. Good luck with your project!
