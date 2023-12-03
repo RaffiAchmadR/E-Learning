@@ -1,0 +1,236 @@
+<?php $__env->startSection('title', 'Dashboard Admin E-Learning Cakrawala (Admin ' . Auth::user()->id . ')'); ?>
+
+<?php $__env->startSection('css'); ?>
+    <link rel="stylesheet" href="<?php echo e(asset('css/dashboard.css')); ?>">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('dashboard', 'nav-active'); ?>
+
+<?php $__env->startSection('container'); ?>
+    <div class="flex-column" id="container-dashboard">
+        <div class="flex-row container-title">
+            <h1 class="poppins">Dashboard Admin <?php echo e(Auth::user()->id); ?></h1>
+        </div>
+        <?php if(Session::has('error')): ?>
+            <div class="notif-danger flex-row montserrat">
+                <img src="<?php echo e(asset('img/icon/notif-danger.svg')); ?>" alt="danger image">
+                <span><?php echo e(Session::get('error')); ?></span>
+            </div>
+        <?php endif; ?>
+        <?php if(Session::has('warning')): ?>
+            <div class="notif-warning flex-row montserrat">
+                <img src="<?php echo e(asset('img/icon/notif-warning.svg')); ?>" alt="warning image">
+                <span><?php echo e(Session::get('warning')); ?></span>
+            </div>
+        <?php endif; ?>
+        <?php if(Session::has('success')): ?>
+            <div class="notif-success flex-row montserrat">
+                <img src="<?php echo e(asset('img/icon/notif-success.svg')); ?>" alt="success image">
+                <span><?php echo e(Session::get('success')); ?></span>
+            </div>
+        <?php endif; ?>
+        <?php if(!$hasEmployee or !$hasStudent or !$hasRoom): ?>
+          <div class="notif-danger flex-row" style="align-items: flex-start">
+            <img src="<?php echo e(asset('img/icon/notif-danger.svg')); ?>" alt="danger image">
+            <div class="span-list flex-column montserrat" style="gap: 5px;align-items: flex-start">
+                <span>Pemberitahuan proses instalasi sistem masih belum selesai! Silahkan lakukan langkah-langkah di bawah ini agar sistem dapat berjalan dengan normal, serta diharap admin dapat memahami alur berjalannya sistem E-Learning Cakrawala. Berikut diantaranya langkah-langkah yang perlu dilakukan:</span>
+                <div class="span-list-item flex-row" style="gap: 4px">
+                    <span>1) Buat akun employee dengan status "Tenaga Didik"</span>
+                    <?php if($hasEmployee): ?>
+                        <span class="badge bg-success" style="padding: 6px 8px; font-weight: 500"><?php echo e($hasEmployee ? 'Selesai' : ''); ?></span>
+                    <?php else: ?>
+                        <span class="badge bg-danger" style="padding: 6px 8px; font-weight: 500"><?php echo e(!$hasEmployee ? 'Belum' : ''); ?></span>
+                    <?php endif; ?>
+                </div>
+                <div class="span-list-item flex-row" style="gap: 4px">
+                    <span>2) Buat ruang kelas, dengan syarat telah menyelesaikan tahap 1</span>
+                    <?php if($hasRoom): ?>
+                        <span class="badge bg-success" style="padding: 6px 8px; font-weight: 500"><?php echo e($hasRoom ? 'Selesai' : ''); ?></span>
+                    <?php else: ?>
+                        <span class="badge bg-danger" style="padding: 6px 8px; font-weight: 500"><?php echo e(!$hasRoom ? 'Belum' : ''); ?></span>
+                    <?php endif; ?>
+                </div>
+                <div class="span-list-item flex-row" style="gap: 4px">
+                    <span>3) Buat akun siswa, dengan syarat telah menyelesaikan tahap 2</span>
+                    <?php if($hasStudent): ?>
+                        <span class="badge bg-success" style="padding: 6px 8px; font-weight: 500"><?php echo e($hasStudent ? 'Selesai' : ''); ?></span>
+                    <?php else: ?>
+                        <span class="badge bg-danger" style="padding: 6px 8px; font-weight: 500"><?php echo e(!$hasStudent ? 'Belum' : ''); ?></span>
+                    <?php endif; ?>
+                </div>
+            </div>
+          </div>
+        <?php endif; ?>
+        <div class="container-content flex-row">
+            <!-- Modal Room -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="staticBackdropLabel">Tidak Dapat Menambahkan Kelas</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" style="text-align: justify">
+                      Tidak dapat melakukan proses penambahan kelas dikarenakan tidak ada akun Employee dengan status "Tenaga Didik", disarankan untuk membuat akun Employee terlebih dahulu.
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                      <a href="<?php echo e(route('employeeCreate')); ?>" class="btn btn-primary poppins" style="background-color: #52B788; border-color: #52B788;font-weight: 400;color: #FBFEFD;" >Buat Employee</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            <!-- Modal Student -->
+            <div class="modal fade" id="modal-student" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-studentLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="modal-studentLabel">Tidak Dapat Membuat Akun Siswa</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" style="text-align: justify">
+                            Tidak dapat melakukan proses pembuatan akun Siswa dikarenakan tidak ada ruang kelas yang terdaftar pada sistem, disarankan untuk membuat ruang kelas terlebih dahulu.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                            <a href="<?php echo e(route('roomCreate')); ?>" class="btn btn-primary poppins" style="background-color: #52B788; border-color: #52B788;font-weight: 400;color: #FBFEFD;">Buat Kelas</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-mapel flex-column">
+                <div class="title-section flex-row">
+                    <button type="button" class="btn btn-primary" style="opacity: 0; cursor:default;">Primary</button>
+                    <h2 class="poppins">Daftar Kelas</h2>
+                    <?php if($hasEmployee): ?>
+                        <a href="<?php echo e(route('roomCreate')); ?>" class="btn btn-primary poppins" style="background-color: #52B788; border-color: #52B788;font-weight: 600;color: #FBFEFD;">+ Tambah Kelas</a>
+                    <?php else: ?>
+                      <!-- Button trigger modal -->
+                      <button type="button" class="btn btn-primary poppins" style="background-color: #52B788; border-color: #52B788;font-weight: 600;color: #FBFEFD;" data-bs-toggle="modal" data-bs-target="#staticBackdrop">+ Tambah Kelas</button>
+                    <?php endif; ?>
+                </div>
+                <?php if(count($room) == 0): ?>
+                  <div class="notif-warning flex-row montserrat">
+                    <img src="<?php echo e(asset('img/icon/notif-warning.svg')); ?>" alt="warning image">
+                    <span>Belum ada kelas yang terdaftar pada sistem! Silahkan buat kelas terlebih dahulu.</span>
+                  </div>
+                <?php else: ?>
+                  <div class="row row-cols-1 row-cols-md-3 g-4">
+                  <?php $__currentLoopData = $room; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <div class="col">
+                      <div class="card h-100">
+                        <img src="<?php echo e($data->photo == null ? asset('img/room/default.jpg') : asset('img/room/' . $data->photo)); ?>" class="card-img-top" alt="foto kelas" style="height: 200px;object-fit: cover;">
+                        <div class="card-body">
+                          <h5 class="card-title"><?php echo e($data->name); ?></h5>
+                          <p class="card-text" style="text-align: justify"><?php echo e($data->description); ?></p>
+                          <div class="d-grid gap-1 d-md-flex justify-content-md-start" id="button-group">
+                            <a href="<?php echo e(route('roomDetail', $data->id)); ?>" class="btn btn-success me-md-2" type="button">Detail</a>
+                            <a href="<?php echo e(route('roomEdit', $data->id)); ?>" class="btn btn-warning me-md-2" type="button">Edit</a>
+                            <form action="<?php echo e(route('roomDelete', $data->id)); ?>" method="POST">
+                                <?php echo csrf_field(); ?>
+                                <?php echo method_field('delete'); ?>
+                                <button class="btn btn-danger" type="submit">Delete</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                  </div>
+                <?php endif; ?>
+            </div>
+            <div class="container-account flex-column">
+                <div class="title-section">
+                    <h2 class="poppins">List Akun</h2>
+                </div>
+                <?php if(isset($admin)): ?>
+                    <ul class="list-group montserrat" id="list-admin">
+                        <li class="list-group-item active d-flex justify-content-between align-items-center" aria-current="true" style="background-color: #023047;border-color: #023047;font-weight: 500;">
+                            Admin
+                            <a href="<?php echo e(route('adminCreate')); ?>" class="btn btn-warning">Create</a>
+                        </li>
+                    <?php $__empty_1 = true; $__currentLoopData = $admin; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <li class="list-item list-group-item d-flex justify-content-between align-items-center">
+                            Admin <?php echo e($data->username); ?> <?php echo e(Auth::user()->id == $data->id ? '(Saya)' : ''); ?>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end" id="button-group">
+                                <a href="<?php echo e(route('adminEdit', $data->id)); ?>" class="btn btn-warning me-md-2" type="button">Edit</a>
+                                <form action="<?php echo e(route('adminDelete', $data->id)); ?>" method="POST">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('delete'); ?>
+                                    <button class="btn btn-danger" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </li>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                          <li class="list-item list-group-item d-flex justify-content-between align-items-center">
+                              Belum ada akun admin
+                          </li>
+                    <?php endif; ?>
+                    </ul>
+                <?php endif; ?>
+                <?php if(isset($employee)): ?>
+                    <ul class="list-group montserrat" id="list-employee">
+                        <li class="list-group-item active d-flex justify-content-between align-items-center" aria-current="true" style="background-color: #ffd166;border-color: #ffd166;font-weight: 500;color: #212121;">
+                            Employee
+                            <a href="<?php echo e(route('employeeCreate')); ?>" class="btn btn-dark">Create</a>
+                        </li>
+                    <?php $__empty_1 = true; $__currentLoopData = $employee; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <li class="list-item list-group-item d-flex justify-content-between align-items-center">
+                            <?php echo e('(' . $data->nip . ') ' . Str::limit($data->name, 16, $end='...')); ?>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end" id="button-group">
+                                <a href="<?php echo e(route('employeeEdit', $data->id)); ?>" class="btn btn-warning me-md-2" type="button">Edit</a>
+                                <form action="<?php echo e(route('employeeDelete', $data->id)); ?>" method="POST">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('delete'); ?>
+                                    <button class="btn btn-danger" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </li>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                          <li class="list-item list-group-item d-flex justify-content-between align-items-center">
+                              Belum ada akun employee
+                          </li>
+                    <?php endif; ?>
+                    </ul>
+                <?php endif; ?>
+                <?php if(isset($student)): ?>
+                    <ul class="list-group montserrat" id="list-student">
+                        <li class="list-group-item active d-flex justify-content-between align-items-center" aria-current="true" style="background-color: #118ab2;border-color: #118ab2;font-weight: 500;">
+                            Student
+                            <?php if($hasRoom): ?>
+                                <a href="<?php echo e(route('studentCreate')); ?>" class="btn btn-warning">Create</a>
+                            <?php else: ?>
+                                <!-- Button trigger modal -->
+                                
+                                <a class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modal-student">Create</a>
+                            <?php endif; ?>
+                        </li>
+                    <?php $__empty_1 = true; $__currentLoopData = $student; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <li class="list-item list-group-item d-flex justify-content-between align-items-center">
+                            <?php echo e('(' . $data->nis . ') ' . Str::limit($data->name, 16, $end='...')); ?>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end" id="button-group">
+                                <a href="<?php echo e(route('studentEdit', $data->id)); ?>" class="btn btn-warning me-md-2" type="button">Edit</a>
+                                <form action="<?php echo e(route('studentDelete', $data->id)); ?>" method="POST">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('delete'); ?>
+                                    <button class="btn btn-danger" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </li>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                          <li class="list-item list-group-item d-flex justify-content-between align-items-center">
+                              Belum ada akun student
+                          </li>
+                    <?php endif; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('template.system', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Raffi\File Raffi\SEM 4\Pweb\Pemrogaman Web PRAK\E-LearningCakrawala-main\E-LearningCakrawala-main\resources\views/admin/dashboard.blade.php ENDPATH**/ ?>
